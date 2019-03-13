@@ -1,5 +1,15 @@
 import * as Bull from 'bull'
 import { config } from './config/config'
+import { wavesApi, config as wavesApiConfig, apolloHttp } from '@waves/waves-rest'
+import { RESTDataSource } from 'apollo-datasource-rest'
+
+class WavesAPI extends RESTDataSource {
+  constructor() {
+    super()
+  }
+}
+
+const { getIssueTxs, getDataTxs } = wavesApi(wavesApiConfig.testnet, apolloHttp(WavesAPI))
 
 export interface FetcherOptions {
   redisUrl: string,
@@ -22,26 +32,30 @@ export class Fetcher {
   }
 
   startPolling() {
-    this._createJob()
+    this._createPollingJob()
   }
 
   private _initQueue() {
     this._fetchQueue = new Bull(FETCH_QUEUE_KEY, this._redisUrl)
 
-    // Remove all previous jobs if exist
-    // this._fetchQueue.empty()
-
     this._fetchQueue.process(POLLING_KEY, async (job: Bull.Job) => {
-      // console.log('process', job.data)
+      if (!config.pollingActivated) {
+        return
+      }
+
+      console.log(POLLING_KEY + ': ', job.data)
+
+      const issueTxs = await getIssueTxs({
+        sender: '3N5C7Yhegg6hYT98VXsaVH9w5sBjGAcgSns',
+      })
+      console.log(issueTxs)
     })
   }
 
-  private _createJob() {
-    this._fetchQueue.add(POLLING_KEY, {
-      foo: 'test',
-    }, {
+  private _createPollingJob() {
+    this._fetchQueue.add(POLLING_KEY, {}, {
       repeat: {
-        every: config.fetcherRepeatEvery,
+        every: config.pollingRepeatEvery,
       },
     })
   }

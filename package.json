@@ -13,7 +13,8 @@
     "gg": "graphqlgen"
   },
   "dependencies": {
-    "@waves/waves-rest": "^0.0.3",
+    "@waves/waves-rest": "0.0.6",
+    "apollo-datasource-rest": "^0.3.2",
     "bull": "^3.7.0",
     "graphql": "^14.0.2",
     "nodemon": "^1.18.10",

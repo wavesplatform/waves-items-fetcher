@@ -2,7 +2,7 @@ import { Fetcher } from './fetcher'
 import { config } from './config/config'
 
 const fetcher = new Fetcher({
-  redisUrl: config.fetcherRedisUrl,
+  redisUrl: config.redisUrl,
 })
 
 fetcher.init()
