@@ -1,0 +1,35 @@
+{
+  "name": "waves-items-fetcher",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node ./src/main.ts",
+    "start:watch": "nodemon",
+    "test": "jest --config=jest.json",
+    "test:watch": "jest --watch --config=jest.json",
+    "prestart:prod": "tsc",
+    "start:prod": "node ./dist/index.js",
+    "gg": "graphqlgen"
+  },
+  "dependencies": {
+    "@waves/waves-rest": "^0.0.3",
+    "bull": "^3.7.0",
+    "graphql": "^14.0.2",
+    "nodemon": "^1.18.10",
+    "prisma-client-lib": "^1.23.1"
+  },
+  "devDependencies": {
+    "@types/bull": "^3.5.8",
+    "@types/graphql": "^14.0.3",
+    "@types/jest": "^23.3.10",
+    "@types/node": "^10.12.17",
+    "graphqlgen": "^0.4.0",
+    "jest": "^23.6.0",
+    "ts-jest": "^23.10.5",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.12.0",
+    "tslint-config-prettier": "^1.17.0",
+    "typescript": "^3.2.2"
+  }
+}

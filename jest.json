@@ -1,0 +1,14 @@
+{
+  "collectCoverage": true,
+  "transform": {
+    "^.+\\.ts$": "ts-jest"
+  },
+  "moduleFileExtensions": [
+    "ts",
+    "js"
+  ],
+  "testEnvironment": "node",
+  "testMatch": [
+    "**/*.test.ts"
+  ]
+}
