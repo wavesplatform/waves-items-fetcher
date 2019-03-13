@@ -13,6 +13,7 @@
     "gg": "graphqlgen"
   },
   "dependencies": {
+    "@waves/waves-crypto": "^2.0.4",
     "@waves/waves-rest": "0.0.6",
     "apollo-datasource-rest": "^0.3.2",
     "bull": "^3.7.0",

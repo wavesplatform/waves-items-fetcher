@@ -3,13 +3,13 @@ import { config } from './config/config'
 import { wavesApi, config as wavesApiConfig, apolloHttp } from '@waves/waves-rest'
 import { RESTDataSource } from 'apollo-datasource-rest'
 
-class WavesAPI extends RESTDataSource {
+class ApolloHttp extends RESTDataSource {
   constructor() {
     super()
   }
 }
 
-const { getIssueTxs, getDataTxs } = wavesApi(wavesApiConfig.testnet, apolloHttp(WavesAPI))
+const { getIssueTxs, getDataTxs } = wavesApi(wavesApiConfig.testnet, apolloHttp(ApolloHttp))
 
 export interface FetcherOptions {
   redisUrl: string,
@@ -39,16 +39,17 @@ export class Fetcher {
     this._fetchQueue = new Bull(FETCH_QUEUE_KEY, this._redisUrl)
 
     this._fetchQueue.process(POLLING_KEY, async (job: Bull.Job) => {
-      if (!config.pollingActivated) {
+      if (!config.pollingEnabled) {
         return
       }
-
       console.log(POLLING_KEY + ': ', job.data)
 
       const issueTxs = await getIssueTxs({
-        sender: '3N5C7Yhegg6hYT98VXsaVH9w5sBjGAcgSns',
+        limit: config.issuesLimit,
+        sender: '3N2MUXXWL1Ws9bCAdrR1xoZWKwBAtyaowFH',
       })
-      console.log(issueTxs)
+      
+      console.log(issueTxs.map(i => i.id))
     })
   }
 
