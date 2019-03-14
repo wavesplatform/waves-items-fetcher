@@ -1,6 +1,5 @@
 import { IssueTransaction } from '@waves/waves-rest'
 import { Item, ItemParams } from '../../common/types'
-import { address } from '@waves/waves-crypto'
 
 export class ItemBuilder {
   private _issueTx: IssueTransaction
@@ -21,11 +20,11 @@ export class ItemBuilder {
     }
 
     const { name, imageUrl, misc } = this._itemParams
-    const { id, senderPublicKey, quantity, reissuable, timestamp } = this._issueTx
+    const { id, sender, quantity, reissuable, timestamp } = this._issueTx
 
     return {
       id,
-      gameId: address(senderPublicKey),
+      gameId: sender,
       name,
       imageUrl,
       quantity,

@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@waves/waves-crypto": "^2.0.4",
-    "@waves/waves-rest": "0.0.6",
-    "apollo-datasource-rest": "^0.3.2",
+    "@waves/waves-rest": "0.0.8",
+    "axios": "^0.18.0",
     "bull": "^3.7.0",
     "graphql": "^14.0.2",
     "nodemon": "^1.18.10",
