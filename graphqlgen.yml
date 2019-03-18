@@ -2,7 +2,7 @@
 language: typescript
 
 # The file path pointing to your GraphQL schema.
-schema: ../schemas/schema.graphql
+schema: ./common/schema.graphql
 
 # Type definition for the resolver context object.
 context: ./src/types.ts:Context

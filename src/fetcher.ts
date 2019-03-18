@@ -6,6 +6,7 @@ import { Item } from '../common/types'
 import { extractItemParamsList } from './helpers/utils'
 import { ItemBuilder } from './helpers/item-builder'
 import { ItemParamsMap } from './types'
+import { saveNewItems } from './actions/items'
 
 const { getIssueTxs, getDataTxs } = wavesApi(wavesApiConfig.testnet, axiosHttp(axios))
 
@@ -114,7 +115,7 @@ export class Fetcher {
       }
     }
 
-    console.log(issueTxs.length, dataTxs.length, newItems)
+    saveNewItems(newItems)
   }
 
   private async _addPollingJob() {
