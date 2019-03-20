@@ -9,8 +9,7 @@
     "test": "jest --config=jest.json",
     "test:watch": "jest --watch --config=jest.json",
     "prestart:prod": "tsc",
-    "start:prod": "node ./dist/index.js",
-    "gg": "graphqlgen"
+    "start:prod": "node ./dist/index.js"
   },
   "dependencies": {
     "@waves/waves-crypto": "^2.0.4",
@@ -26,7 +25,7 @@
     "@types/graphql": "^14.0.3",
     "@types/jest": "^23.3.10",
     "@types/node": "^10.12.17",
-    "graphqlgen": "^0.4.0",
+    "@waves/types": "0.0.2",
     "jest": "^23.6.0",
     "ts-jest": "^23.10.5",
     "ts-node": "^7.0.1",

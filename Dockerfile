@@ -2,6 +2,9 @@ FROM node:alpine
 
 WORKDIR /app
 
+# Remove it for production
+COPY .npmrc ./
+
 COPY package.json package-lock.json ./
 
 # Build deps for alpine

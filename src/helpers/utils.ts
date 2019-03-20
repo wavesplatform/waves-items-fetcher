@@ -1,6 +1,6 @@
 import { DataTransaction } from '@waves/waves-rest'
-import { ItemParams } from '../../common/types'
 import { ItemParamsMap } from '../types'
+import { ItemParams } from '@waves/types'
 
 export const isItemParams = (params: any) => {
   return (

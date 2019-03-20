@@ -2,11 +2,11 @@ import * as Bull from 'bull'
 import { config } from './config/config'
 import { axiosHttp, config as wavesApiConfig, wavesApi } from '@waves/waves-rest'
 import axios from 'axios'
-import { Item } from '../common/types'
 import { extractItemParamsList } from './helpers/utils'
 import { ItemBuilder } from './helpers/item-builder'
 import { ItemParamsMap } from './types'
 import { saveNewItems } from './actions/items'
+import { Item } from '@waves/types'
 
 const { getIssueTxs, getDataTxs } = wavesApi(wavesApiConfig.testnet, axiosHttp(axios))
 

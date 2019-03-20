@@ -1,5 +1,5 @@
 import { IssueTransaction } from '@waves/waves-rest'
-import { Item, ItemParams } from '../../common/types'
+import { Item, ItemParams } from '@waves/types'
 
 export class ItemBuilder {
   private _issueTx: IssueTransaction
