@@ -38,7 +38,7 @@ export class Fetcher {
 
   async startPolling() {
     await this._removePollingJob()
-    // await this._firstInitItems()
+    await this._firstInitItems()
     await this._addPollingJob()
   }
 
@@ -81,8 +81,15 @@ export class Fetcher {
       orderBy: 'timestamp_DESC',
       first: 1,
     }))[0]
-    const dateStart = new Date(lastItem.timestamp)
-    const timeStart = dateStart.getTime()
+
+    let dateStart, timeStart
+    if (lastItem) {
+      dateStart = new Date(lastItem.timestamp)
+      timeStart = dateStart.getTime()
+    } else {
+      timeStart = 0
+      dateStart = new Date(0)
+    }
 
     const items = await this._takeItems(creators[0], timeStart)
 
