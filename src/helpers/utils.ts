@@ -1,6 +1,7 @@
 import { DataTransaction } from '@waves/waves-rest'
 import { ItemParamsMap } from '../types'
-import { ItemParams } from '@waves/types'
+import { Item as WavesItem, ItemParams } from '@waves/types'
+import { ItemCreateInput } from '../__generated__/prisma-client'
 
 export const isItemParams = (params: any) => {
   return (
@@ -15,7 +16,7 @@ export const extractItemParamsList = <T = any>(dataTx: DataTransaction, keys?: s
   const itemParamsMap: Record<string, ItemParams<T>> = {}
 
   const dataEntries = keys
-    ? dataTx.data.filter(entry => keys.indexOf(entry.key))
+    ? dataTx.data.filter(entry => keys.indexOf(entry.key) > -1)
     : dataTx.data
 
   for (const entry of dataEntries) {
@@ -34,4 +35,19 @@ export const extractItemParamsList = <T = any>(dataTx: DataTransaction, keys?: s
   }
 
   return itemParamsMap
+}
+
+export const toItemInput = (item: WavesItem): ItemCreateInput => {
+  const { name, quantity, imageUrl, reissuable, timestamp, misc, rawParams, gameId } = item
+  return {
+    assetId: item.id,
+    name,
+    quantity: quantity as number,
+    game: { connect: { address: gameId } },
+    imageUrl,
+    reissuable,
+    timestamp: new Date(timestamp),
+    misc,
+    rawParams,
+  }
 }

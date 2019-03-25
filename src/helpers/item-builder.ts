@@ -1,5 +1,5 @@
 import { IssueTransaction } from '@waves/waves-rest'
-import { Item, ItemParams } from '@waves/types'
+import { Item as WavesItem, ItemParams } from '@waves/types'
 
 export class ItemBuilder {
   private _issueTx: IssueTransaction
@@ -14,7 +14,7 @@ export class ItemBuilder {
     return this
   }
 
-  build(): Item {
+  build(): WavesItem {
     if (!this._itemParams) {
       throw Error('Item params not set')
     }

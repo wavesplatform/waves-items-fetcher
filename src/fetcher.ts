@@ -5,8 +5,9 @@ import axios from 'axios'
 import { extractItemParamsList } from './helpers/utils'
 import { ItemBuilder } from './helpers/item-builder'
 import { ItemParamsMap } from './types'
-import { saveNewItems } from './actions/items'
-import { Item } from '@waves/types'
+import { overwriteRange } from './actions/items'
+import { Item as WavesItem } from '@waves/types'
+import { prisma } from './__generated__/prisma-client'
 
 const { getIssueTxs, getDataTxs } = wavesApi(wavesApiConfig.testnet, axiosHttp(axios))
 
@@ -36,7 +37,8 @@ export class Fetcher {
   }
 
   async startPolling() {
-    // await this._removePollingJob()
+    await this._removePollingJob()
+    await this._firstInitItems()
     await this._addPollingJob()
   }
 
@@ -72,6 +74,21 @@ export class Fetcher {
     await this._assignNowItems()
   }
 
+  private async _firstInitItems() {
+    console.log('_firstInitItems()')
+
+    const lastItem = (await prisma.items({
+      orderBy: 'timestamp_DESC',
+      first: 1,
+    }))[0]
+    const dateStart = new Date(lastItem.timestamp)
+    const timeStart = dateStart.getTime()
+
+    const items = await this._takeItems(creators[0], timeStart)
+
+    overwriteRange(items, { dateStart })
+  }
+
   /**
    * Get last issues & data transactions and build/store items.
    * @private
@@ -79,21 +96,26 @@ export class Fetcher {
   private async _assignNowItems() {
     console.log('_assignNowItems()')
 
-    const newItems: Item[] = []
-
     const timeStart = Date.now() - config.pollingOffset
+    const items = await this._takeItems(creators[0], timeStart)
+
+    overwriteRange(items, { dateStart: new Date(timeStart) })
+  }
+
+  private async _takeItems(creator: string, timeStart: number): Promise<WavesItem[]> {
+    const items: WavesItem[] = []
 
     // Get all issue txs
     const issueTxs = await getIssueTxs({
       // limit: config.issueLimit,
-      sender: creators[0],
+      sender: creator,
       timeStart,
     })
     const itemIds = issueTxs.map(tx => tx.id)
 
     // Get all data txs
     const dataTxs = await getDataTxs({
-      sender: creators[0],
+      sender: creator,
       timeStart,
     })
 
@@ -105,25 +127,26 @@ export class Fetcher {
 
     for (const issueTx of issueTxs) {
       try {
-        const item: Item = new ItemBuilder(issueTx)
+        const item: WavesItem = new ItemBuilder(issueTx)
           .setItemParams(itemParamsMap[issueTx.id])
           .build()
 
-        newItems.push(item)
+        items.push(item)
       } catch (err) {
+        console.log(err)
         // The problem with build item
       }
     }
 
-    saveNewItems(newItems)
+    return items
   }
 
   private async _addPollingJob() {
     console.log('_addPollingJob()')
     await this._fetchQueue.add(POLLING_KEY, {}, {
-      // repeat: {
-      //   every: config.pollingRepeatEvery,
-      // },
+      repeat: {
+        every: config.pollingRepeatEvery,
+      },
     })
   }
 
