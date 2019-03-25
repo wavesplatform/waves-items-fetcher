@@ -38,7 +38,7 @@ export class Fetcher {
 
   async startPolling() {
     await this._removePollingJob()
-    await this._firstInitItems()
+    // await this._firstInitItems()
     await this._addPollingJob()
   }
 
@@ -106,18 +106,26 @@ export class Fetcher {
     const items: WavesItem[] = []
 
     // Get all issue txs
-    const issueTxs = await getIssueTxs({
-      // limit: config.issueLimit,
+    const issueTxsChunks = getIssueTxs({
+      limit: 1,
       sender: creator,
       timeStart,
     })
+    const issueTxs = []
+    for await (const chunk of issueTxsChunks) {
+      issueTxs.push(...chunk)
+    }
     const itemIds = issueTxs.map(tx => tx.id)
 
     // Get all data txs
-    const dataTxs = await getDataTxs({
+    const dataTxsChunks = getDataTxs({
       sender: creator,
       timeStart,
     })
+    const dataTxs = []
+    for await (const chunk of dataTxsChunks) {
+      dataTxs.push(...chunk)
+    }
 
     // Extract item params list
     const itemParamsMap: ItemParamsMap<any> = {}

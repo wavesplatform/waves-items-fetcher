@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@waves/waves-crypto": "^2.0.4",
-    "@waves/waves-rest": "0.0.8",
+    "@waves/waves-rest": "0.0.11",
     "axios": "^0.18.0",
     "bull": "^3.7.0",
     "graphql": "^14.0.2",
