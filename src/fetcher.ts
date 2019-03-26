@@ -1,11 +1,7 @@
 import * as Bull from 'bull'
 import { config } from './config/config'
-import { getLastTime, overwriteRange, takeItems } from './core/items'
-
-// TODO: temp instead db
-const creators = [
-  '3N2MUXXWL1Ws9bCAdrR1xoZWKwBAtyaowFH',
-]
+import { getLastTime, overwriteRange, takeItems, takeItemsForGame } from './core/items'
+import { getGameAddresses } from './core/users'
 
 export interface FetcherOptions {
   redisUrl: string,
@@ -70,8 +66,8 @@ export class Fetcher {
 
     try {
       const timeStart = await getLastTime()
-
-      const items = await takeItems(creators[0], timeStart)
+      const gameAddresses = await getGameAddresses()
+      const items = await takeItems(gameAddresses, timeStart)
 
       overwriteRange(items, { dateStart: new Date(timeStart) })
     } catch (err) {
@@ -88,7 +84,8 @@ export class Fetcher {
     console.log('_assignNewItems()')
 
     const timeStart = Date.now() - config.pollingOffset
-    const items = await takeItems(creators[0], timeStart)
+    const gameAddresses = await getGameAddresses()
+    const items = await takeItems(gameAddresses, timeStart)
 
     overwriteRange(items, { dateStart: new Date(timeStart) })
   }

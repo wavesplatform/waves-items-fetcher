@@ -2,13 +2,13 @@
 // Please don't change this file manually but run `prisma generate` to update it.
 // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-import { DocumentNode } from "graphql"
+import { DocumentNode } from "graphql";
 import {
   makePrismaClientClass,
   BaseClientOptions,
   Model
-} from "prisma-client-lib"
-import { typeDefs } from "./prisma-schema"
+} from "prisma-client-lib";
+import { typeDefs } from "./prisma-schema";
 
 export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
@@ -18,8 +18,7 @@ export interface Exists {
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
-export interface Node {
-}
+export interface Node {}
 
 export type FragmentableArray<T> = Promise<Array<T>> & Fragmentable;
 
@@ -140,7 +139,7 @@ export interface Subscription {
 }
 
 export interface ClientConstructor<T> {
-  new(options?: BaseClientOptions): T;
+  new (options?: BaseClientOptions): T;
 }
 
 /**
@@ -1042,7 +1041,7 @@ export const models: Model[] = [
     name: "UserRole",
     embedded: false
   }
-]
+];
 
 /**
  * Type Defs
@@ -1052,5 +1051,5 @@ export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
   models,
   endpoint: `http://${process.env["PRISMA_HOST"]}:4466`
-})
-export const prisma = new Prisma()
+});
+export const prisma = new Prisma();

@@ -14,11 +14,26 @@ interface DateRange {
 }
 
 /**
- * Get transactions from blockchain (Waves) and build item object
+ * Take items for all specified creators
+ * @param creators
+ * @param timeStart
+ */
+export const takeItems = async (creators: string[], timeStart: number): Promise<WavesItem[]> => {
+  const items = []
+  for (const creator of creators) {
+    const itemsForGame = await takeItemsForGame(creator, timeStart)
+    items.push(...itemsForGame)
+  }
+
+  return items
+}
+
+/**
+ * Get transactions from blockchain (Waves) and build item objects
  * @param creator
  * @param timeStart
  */
-export const takeItems = async (creator: string, timeStart: number): Promise<WavesItem[]> => {
+export const takeItemsForGame = async (creator: string, timeStart: number): Promise<WavesItem[]> => {
   const items: WavesItem[] = []
 
   // Get all issue txs
