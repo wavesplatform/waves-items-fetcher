@@ -76,24 +76,11 @@ export class Fetcher {
 
   private async _firstInitItems() {
     console.log('_firstInitItems()')
-
-    const lastItem = (await prisma.items({
-      orderBy: 'timestamp_DESC',
-      first: 1,
-    }))[0]
-
-    let dateStart, timeStart
-    if (lastItem) {
-      dateStart = new Date(lastItem.timestamp)
-      timeStart = dateStart.getTime()
-    } else {
-      timeStart = 0
-      dateStart = new Date(0)
-    }
+    const timeStart = await this._getLastTime()
 
     const items = await this._takeItems(creators[0], timeStart)
 
-    overwriteRange(items, { dateStart })
+    overwriteRange(items, { dateStart: new Date(timeStart) })
   }
 
   /**
@@ -154,6 +141,19 @@ export class Fetcher {
     }
 
     return items
+  }
+
+  private async _getLastTime(): Promise<number> {
+    const lastItem = (await prisma.items({
+      orderBy: 'timestamp_DESC',
+      first: 1,
+    }))[0]
+
+    if (lastItem) {
+      return (new Date(lastItem.timestamp)).getTime()
+    } else {
+      return 0
+    }
   }
 
   private async _addPollingJob() {
