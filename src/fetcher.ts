@@ -1,15 +1,6 @@
 import * as Bull from 'bull'
 import { config } from './config/config'
-import { axiosHttp, config as wavesApiConfig, wavesApi } from '@waves/waves-rest'
-import axios from 'axios'
-import { extractItemParamsList } from './helpers/utils'
-import { ItemBuilder } from './helpers/item-builder'
-import { ItemParamsMap } from './types'
-import { overwriteRange } from './actions/items'
-import { Item as WavesItem } from '@waves/types'
-import { prisma } from './__generated__/prisma-client'
-
-const { getIssueTxs, getDataTxs } = wavesApi(wavesApiConfig.testnet, axiosHttp(axios))
+import { getLastTime, overwriteRange, takeItems } from './core/items'
 
 // TODO: temp instead db
 const creators = [
@@ -31,12 +22,12 @@ export class Fetcher {
     this._redisUrl = options.redisUrl
   }
 
-  init() {
+  init(): void {
     console.log('Fetcher initialization...')
     this._initQueue()
   }
 
-  async startPolling() {
+  async startPolling(): Promise<void> {
     await this._removePollingJob()
     await this._firstInitItems()
     await this._addPollingJob()
@@ -71,89 +62,35 @@ export class Fetcher {
 
   private async _processPolling() {
     // Adding items in realtime
-    await this._assignNowItems()
+    await this._assignNewItems()
   }
 
   private async _firstInitItems() {
     console.log('_firstInitItems()')
-    const timeStart = await this._getLastTime()
 
-    const items = await this._takeItems(creators[0], timeStart)
+    try {
+      const timeStart = await getLastTime()
 
-    overwriteRange(items, { dateStart: new Date(timeStart) })
+      const items = await takeItems(creators[0], timeStart)
+
+      overwriteRange(items, { dateStart: new Date(timeStart) })
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 
   /**
    * Get last issues & data transactions and build/store items.
    * @private
    */
-  private async _assignNowItems() {
-    console.log('_assignNowItems()')
+  private async _assignNewItems() {
+    console.log('_assignNewItems()')
 
     const timeStart = Date.now() - config.pollingOffset
-    const items = await this._takeItems(creators[0], timeStart)
+    const items = await takeItems(creators[0], timeStart)
 
     overwriteRange(items, { dateStart: new Date(timeStart) })
-  }
-
-  private async _takeItems(creator: string, timeStart: number): Promise<WavesItem[]> {
-    const items: WavesItem[] = []
-
-    // Get all issue txs
-    const issueTxsChunks = getIssueTxs({
-      limit: 1,
-      sender: creator,
-      timeStart,
-    })
-    const issueTxs = []
-    for await (const chunk of issueTxsChunks) {
-      issueTxs.push(...chunk)
-    }
-    const itemIds = issueTxs.map(tx => tx.id)
-
-    // Get all data txs
-    const dataTxsChunks = getDataTxs({
-      sender: creator,
-      timeStart,
-    })
-    const dataTxs = []
-    for await (const chunk of dataTxsChunks) {
-      dataTxs.push(...chunk)
-    }
-
-    // Extract item params list
-    const itemParamsMap: ItemParamsMap<any> = {}
-    for (const dataTx of dataTxs) {
-      Object.assign(itemParamsMap, extractItemParamsList(dataTx, itemIds))
-    }
-
-    for (const issueTx of issueTxs) {
-      try {
-        const item: WavesItem = new ItemBuilder(issueTx)
-          .setItemParams(itemParamsMap[issueTx.id])
-          .build()
-
-        items.push(item)
-      } catch (err) {
-        console.log(err)
-        // The problem with build item
-      }
-    }
-
-    return items
-  }
-
-  private async _getLastTime(): Promise<number> {
-    const lastItem = (await prisma.items({
-      orderBy: 'timestamp_DESC',
-      first: 1,
-    }))[0]
-
-    if (lastItem) {
-      return (new Date(lastItem.timestamp)).getTime()
-    } else {
-      return 0
-    }
   }
 
   private async _addPollingJob() {
