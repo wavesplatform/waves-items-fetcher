@@ -5,6 +5,7 @@ import { ItemParamsMap } from '../types'
 import { ItemBuilder } from '../helpers/item-builder'
 import { axiosHttp, config as wavesApiConfig, wavesApi } from '@waves/waves-rest'
 import axios from 'axios'
+import { logger } from '../logger'
 
 const { getIssueTxs, getDataTxs } = wavesApi(wavesApiConfig.testnet, axiosHttp(axios))
 
@@ -72,7 +73,7 @@ export const takeItemsForGame = async (creator: string, timeStart: number): Prom
 
       items.push(item)
     } catch (err) {
-      console.log(err)
+      logger.warn(err)
       // The problem with build item
     }
   }
@@ -130,7 +131,7 @@ export const overwriteRange = async (items: WavesItem[], dateRange: DateRange): 
         create: itemInput,
         update: itemInput,
       })
-      console.log(upsertedItem.assetId)
+      logger.info('Upserted Asset ID: %s', upsertedItem.assetId)
     } catch (err) {
       throw err
     }

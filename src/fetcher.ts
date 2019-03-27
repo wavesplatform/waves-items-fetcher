@@ -2,6 +2,7 @@ import * as Bull from 'bull'
 import { config } from './config/config'
 import { getLastTime, overwriteRange, takeItems, takeItemsForGame } from './core/items'
 import { getGameAddresses } from './core/users'
+import { logger } from './logger'
 
 export interface FetcherOptions {
   redisUrl: string,
@@ -19,7 +20,7 @@ export class Fetcher {
   }
 
   init(): void {
-    console.log('Fetcher initialization...')
+    logger.info('Fetcher initialization...')
     this._initQueue()
   }
 
@@ -48,7 +49,7 @@ export class Fetcher {
       try {
         await this._processPolling()
       } catch (err) {
-        console.error(err)
+        logger.error(err)
         throw err
       }
     })
@@ -62,7 +63,7 @@ export class Fetcher {
   }
 
   private async _firstInitItems() {
-    console.log('_firstInitItems()')
+    logger.debug('_firstInitItems()')
 
     try {
       const timeStart = await getLastTime()
@@ -71,7 +72,7 @@ export class Fetcher {
 
       overwriteRange(items, { dateStart: new Date(timeStart) })
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       throw err
     }
   }
@@ -81,7 +82,7 @@ export class Fetcher {
    * @private
    */
   private async _assignNewItems() {
-    console.log('_assignNewItems()')
+    logger.debug('_assignNewItems()')
 
     const timeStart = Date.now() - config.pollingOffset
     const gameAddresses = await getGameAddresses()
@@ -91,7 +92,7 @@ export class Fetcher {
   }
 
   private async _addPollingJob() {
-    console.log('_addPollingJob()')
+    logger.debug('_addPollingJob()')
     await this._fetchQueue.add(POLLING_KEY, {}, {
       repeat: {
         every: config.pollingRepeatEvery,
@@ -100,7 +101,7 @@ export class Fetcher {
   }
 
   private async _removePollingJob() {
-    console.log('_removePollingJob()')
+    logger.debug('_removePollingJob()')
     await this._fetchQueue.removeRepeatable(POLLING_KEY, {
       every: config.pollingRepeatEvery,
     })
