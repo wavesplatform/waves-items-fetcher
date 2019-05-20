@@ -363,7 +363,7 @@ export interface UserCreateOneWithoutItemsInput {
 
 export interface UserCreateWithoutItemsInput {
   address: String;
-  name: String;
+  name?: String;
   roles?: UserCreaterolesInput;
 }
 
@@ -418,7 +418,7 @@ export interface ItemUpdateManyMutationInput {
 
 export interface UserCreateInput {
   address: String;
-  name: String;
+  name?: String;
   roles?: UserCreaterolesInput;
   items?: ItemCreateManyWithoutGameInput;
 }
@@ -679,7 +679,7 @@ export interface ItemSubscription
 export interface User {
   id: ID_Output;
   address: String;
-  name: String;
+  name?: String;
   roles: UserRole[];
 }
 
@@ -967,7 +967,7 @@ export interface UserSubscriptionPayloadSubscription
 export interface UserPreviousValues {
   id: ID_Output;
   address: String;
-  name: String;
+  name?: String;
   roles: UserRole[];
 }
 

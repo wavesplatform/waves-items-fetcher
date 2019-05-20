@@ -1,6 +1,6 @@
 import * as Bull from 'bull'
 import { config } from './config/config'
-import { getLastTime, overwriteRange, takeItems, takeItemsForGame } from './core/items'
+import { getLastTime, overwriteRange, takeItems } from './core/items'
 import { getGameAddresses } from './core/users'
 import { logger } from './logger'
 
@@ -73,7 +73,6 @@ export class Fetcher {
       overwriteRange(items, { dateStart: new Date(timeStart) })
     } catch (err) {
       logger.error(err)
-      throw err
     }
   }
 

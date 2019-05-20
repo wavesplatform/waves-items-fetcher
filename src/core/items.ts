@@ -73,7 +73,7 @@ export const takeItemsForGame = async (creator: string, timeStart: number): Prom
 
       items.push(item)
     } catch (err) {
-      logger.warn(err)
+      logger.warning(err)
       // The problem with build item
     }
   }

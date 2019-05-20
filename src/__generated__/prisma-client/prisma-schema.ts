@@ -452,7 +452,7 @@ type Subscription {
 type User {
   id: ID!
   address: String!
-  name: String!
+  name: String
   roles: [UserRole!]!
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
 }
@@ -465,7 +465,7 @@ type UserConnection {
 
 input UserCreateInput {
   address: String!
-  name: String!
+  name: String
   roles: UserCreaterolesInput
   items: ItemCreateManyWithoutGameInput
 }
@@ -481,7 +481,7 @@ input UserCreaterolesInput {
 
 input UserCreateWithoutItemsInput {
   address: String!
-  name: String!
+  name: String
   roles: UserCreaterolesInput
 }
 
@@ -506,7 +506,7 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   address: String!
-  name: String!
+  name: String
   roles: [UserRole!]!
 }
 
