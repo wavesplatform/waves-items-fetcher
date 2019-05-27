@@ -455,6 +455,7 @@ type User {
   name: String
   roles: [UserRole!]!
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
+  image: Json
 }
 
 type UserConnection {
@@ -468,6 +469,7 @@ input UserCreateInput {
   name: String
   roles: UserCreaterolesInput
   items: ItemCreateManyWithoutGameInput
+  image: Json
 }
 
 input UserCreateOneWithoutItemsInput {
@@ -483,6 +485,7 @@ input UserCreateWithoutItemsInput {
   address: String!
   name: String
   roles: UserCreaterolesInput
+  image: Json
 }
 
 type UserEdge {
@@ -497,6 +500,8 @@ enum UserOrderByInput {
   address_DESC
   name_ASC
   name_DESC
+  image_ASC
+  image_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -508,6 +513,7 @@ type UserPreviousValues {
   address: String!
   name: String
   roles: [UserRole!]!
+  image: Json
 }
 
 enum UserRole {
@@ -538,12 +544,14 @@ input UserUpdateInput {
   name: String
   roles: UserUpdaterolesInput
   items: ItemUpdateManyWithoutGameInput
+  image: Json
 }
 
 input UserUpdateManyMutationInput {
   address: String
   name: String
   roles: UserUpdaterolesInput
+  image: Json
 }
 
 input UserUpdateOneRequiredWithoutItemsInput {
@@ -561,6 +569,7 @@ input UserUpdateWithoutItemsDataInput {
   address: String
   name: String
   roles: UserUpdaterolesInput
+  image: Json
 }
 
 input UserUpsertWithoutItemsInput {

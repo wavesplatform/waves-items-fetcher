@@ -179,6 +179,8 @@ export type UserOrderByInput =
   | "address_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "image_ASC"
+  | "image_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -365,6 +367,7 @@ export interface UserCreateWithoutItemsInput {
   address: String;
   name?: String;
   roles?: UserCreaterolesInput;
+  image?: Json;
 }
 
 export interface UserCreaterolesInput {
@@ -394,6 +397,7 @@ export interface UserUpdateWithoutItemsDataInput {
   address?: String;
   name?: String;
   roles?: UserUpdaterolesInput;
+  image?: Json;
 }
 
 export interface UserUpdaterolesInput {
@@ -421,6 +425,7 @@ export interface UserCreateInput {
   name?: String;
   roles?: UserCreaterolesInput;
   items?: ItemCreateManyWithoutGameInput;
+  image?: Json;
 }
 
 export interface ItemCreateManyWithoutGameInput {
@@ -444,6 +449,7 @@ export interface UserUpdateInput {
   name?: String;
   roles?: UserUpdaterolesInput;
   items?: ItemUpdateManyWithoutGameInput;
+  image?: Json;
 }
 
 export interface ItemUpdateManyWithoutGameInput {
@@ -602,6 +608,7 @@ export interface UserUpdateManyMutationInput {
   address?: String;
   name?: String;
   roles?: UserUpdaterolesInput;
+  image?: Json;
 }
 
 export interface ItemSubscriptionWhereInput {
@@ -681,6 +688,7 @@ export interface User {
   address: String;
   name?: String;
   roles: UserRole[];
+  image?: Json;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
@@ -699,6 +707,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
       last?: Int;
     }
   ) => T;
+  image: () => Promise<Json>;
 }
 
 export interface UserSubscription
@@ -719,6 +728,7 @@ export interface UserSubscription
       last?: Int;
     }
   ) => T;
+  image: () => Promise<AsyncIterator<Json>>;
 }
 
 export interface ItemConnection {
@@ -969,6 +979,7 @@ export interface UserPreviousValues {
   address: String;
   name?: String;
   roles: UserRole[];
+  image?: Json;
 }
 
 export interface UserPreviousValuesPromise
@@ -978,6 +989,7 @@ export interface UserPreviousValuesPromise
   address: () => Promise<String>;
   name: () => Promise<String>;
   roles: () => Promise<UserRole[]>;
+  image: () => Promise<Json>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -987,6 +999,7 @@ export interface UserPreviousValuesSubscription
   address: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
   roles: () => Promise<AsyncIterator<UserRole[]>>;
+  image: () => Promise<AsyncIterator<Json>>;
 }
 
 /*
