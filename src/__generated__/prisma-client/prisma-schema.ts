@@ -453,6 +453,7 @@ type User {
   id: ID!
   address: String!
   name: String
+  email: String
   roles: [UserRole!]!
   items(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Item!]
   image: Json
@@ -467,6 +468,7 @@ type UserConnection {
 input UserCreateInput {
   address: String!
   name: String
+  email: String
   roles: UserCreaterolesInput
   items: ItemCreateManyWithoutGameInput
   image: Json
@@ -484,6 +486,7 @@ input UserCreaterolesInput {
 input UserCreateWithoutItemsInput {
   address: String!
   name: String
+  email: String
   roles: UserCreaterolesInput
   image: Json
 }
@@ -500,6 +503,8 @@ enum UserOrderByInput {
   address_DESC
   name_ASC
   name_DESC
+  email_ASC
+  email_DESC
   image_ASC
   image_DESC
   createdAt_ASC
@@ -512,6 +517,7 @@ type UserPreviousValues {
   id: ID!
   address: String!
   name: String
+  email: String
   roles: [UserRole!]!
   image: Json
 }
@@ -542,6 +548,7 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   address: String
   name: String
+  email: String
   roles: UserUpdaterolesInput
   items: ItemUpdateManyWithoutGameInput
   image: Json
@@ -550,6 +557,7 @@ input UserUpdateInput {
 input UserUpdateManyMutationInput {
   address: String
   name: String
+  email: String
   roles: UserUpdaterolesInput
   image: Json
 }
@@ -568,6 +576,7 @@ input UserUpdaterolesInput {
 input UserUpdateWithoutItemsDataInput {
   address: String
   name: String
+  email: String
   roles: UserUpdaterolesInput
   image: Json
 }
@@ -620,6 +629,20 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
   items_every: ItemWhereInput
   items_some: ItemWhereInput
   items_none: ItemWhereInput

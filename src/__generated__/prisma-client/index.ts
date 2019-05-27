@@ -179,6 +179,8 @@ export type UserOrderByInput =
   | "address_DESC"
   | "name_ASC"
   | "name_DESC"
+  | "email_ASC"
+  | "email_DESC"
   | "image_ASC"
   | "image_DESC"
   | "createdAt_ASC"
@@ -333,6 +335,20 @@ export interface UserWhereInput {
   name_not_starts_with?: String;
   name_ends_with?: String;
   name_not_ends_with?: String;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
   items_every?: ItemWhereInput;
   items_some?: ItemWhereInput;
   items_none?: ItemWhereInput;
@@ -366,6 +382,7 @@ export interface UserCreateOneWithoutItemsInput {
 export interface UserCreateWithoutItemsInput {
   address: String;
   name?: String;
+  email?: String;
   roles?: UserCreaterolesInput;
   image?: Json;
 }
@@ -396,6 +413,7 @@ export interface UserUpdateOneRequiredWithoutItemsInput {
 export interface UserUpdateWithoutItemsDataInput {
   address?: String;
   name?: String;
+  email?: String;
   roles?: UserUpdaterolesInput;
   image?: Json;
 }
@@ -423,6 +441,7 @@ export interface ItemUpdateManyMutationInput {
 export interface UserCreateInput {
   address: String;
   name?: String;
+  email?: String;
   roles?: UserCreaterolesInput;
   items?: ItemCreateManyWithoutGameInput;
   image?: Json;
@@ -447,6 +466,7 @@ export interface ItemCreateWithoutGameInput {
 export interface UserUpdateInput {
   address?: String;
   name?: String;
+  email?: String;
   roles?: UserUpdaterolesInput;
   items?: ItemUpdateManyWithoutGameInput;
   image?: Json;
@@ -607,6 +627,7 @@ export interface ItemUpdateManyDataInput {
 export interface UserUpdateManyMutationInput {
   address?: String;
   name?: String;
+  email?: String;
   roles?: UserUpdaterolesInput;
   image?: Json;
 }
@@ -687,6 +708,7 @@ export interface User {
   id: ID_Output;
   address: String;
   name?: String;
+  email?: String;
   roles: UserRole[];
   image?: Json;
 }
@@ -695,6 +717,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   address: () => Promise<String>;
   name: () => Promise<String>;
+  email: () => Promise<String>;
   roles: () => Promise<UserRole[]>;
   items: <T = FragmentableArray<Item>>(
     args?: {
@@ -716,6 +739,7 @@ export interface UserSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   address: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
   roles: () => Promise<AsyncIterator<UserRole[]>>;
   items: <T = Promise<AsyncIterator<ItemSubscription>>>(
     args?: {
@@ -978,6 +1002,7 @@ export interface UserPreviousValues {
   id: ID_Output;
   address: String;
   name?: String;
+  email?: String;
   roles: UserRole[];
   image?: Json;
 }
@@ -988,6 +1013,7 @@ export interface UserPreviousValuesPromise
   id: () => Promise<ID_Output>;
   address: () => Promise<String>;
   name: () => Promise<String>;
+  email: () => Promise<String>;
   roles: () => Promise<UserRole[]>;
   image: () => Promise<Json>;
 }
@@ -998,6 +1024,7 @@ export interface UserPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   address: () => Promise<AsyncIterator<String>>;
   name: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
   roles: () => Promise<AsyncIterator<UserRole[]>>;
   image: () => Promise<AsyncIterator<Json>>;
 }
